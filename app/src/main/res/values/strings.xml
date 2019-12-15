@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="title_home">Home</string>
+    <string name="title_messages">Messages</string>
+    <string name="title_account">Account</string>
+    <string name="Search">search</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="number_phone">+266 225 225</string>
+    <string name="add_to_group">Add to group</string>
+    <string name="show_all_comments">Show all comments</string>
+    <string name="enter_message">Enter message</string>
+</resources>
