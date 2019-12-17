@@ -1,6 +1,5 @@
 package com.example.myapplication.Adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,52 +10,65 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Model.User;
-import com.example.myapplication.Model.UserMessage;
 import com.example.myapplication.R;
 
 import java.util.List;
 
 public class MessagesAdapter extends RecyclerView.Adapter<MessagesAdapter.MyViewHolder> {
-    private Context context;
-    private List<UserMessage> userMessages;
+    private List<User> users;
+    private OnItemClickListener onItemClickListener;
 
-
-    public MessagesAdapter(Context context, List<UserMessage> messages) {
-        this.context = context;
-        this.userMessages = messages;
-        notifyDataSetChanged();
+    public MessagesAdapter(List<User> users) {
+        this.users = users;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_other_user, parent, false);
-        return new MyViewHolder(view);
+        return new MyViewHolder(view, onItemClickListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holders, int position) {
-        UserMessage currentuser = userMessages.get(position);
-        String name = currentuser.getName();
-        holders.name.setText(name);
-        int imagePath = currentuser.getImagePath();
-        holders.image.setImageResource(imagePath);
+        User user = users.get(position);
+        holders.image.setImageResource(user.getImagePath());
+        holders.name.setText(user.getName());
     }
-
 
     @Override
     public int getItemCount() {
-        return userMessages.size();
+        return users.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView image;
         private TextView name;
+        OnItemClickListener onItemClickListener;
 
-        MyViewHolder(@NonNull final View itemView) {
+
+        MyViewHolder(@NonNull final View itemView, final OnItemClickListener onItemClickListener) {
             super(itemView);
             image = itemView.findViewById(R.id.image);
             name = itemView.findViewById(R.id.text_name);
+            this.onItemClickListener = onItemClickListener;
+            itemView.setOnClickListener(this);
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(v, getAdapterPosition());
+            }
         }
     }
 

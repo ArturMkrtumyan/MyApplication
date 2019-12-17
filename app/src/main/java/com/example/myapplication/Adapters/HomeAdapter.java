@@ -1,7 +1,6 @@
 
 package com.example.myapplication.Adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,13 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.Model.User;
 import com.example.myapplication.R;
 
+import java.util.ArrayList;
+
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> {
-    private Context context;
     private OnItemClickListener onItemClickListener;
+    private ArrayList<User> users;
 
 
-    public HomeAdapter(Context context) {
-        this.context = context;
+    public HomeAdapter(ArrayList<User> users) {
+        this.users = users;
     }
 
     @NonNull
@@ -32,13 +33,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holders, int position) {
-        holders.onBind(position);
+        User user = users.get(position);
+        holders.name.setText(user.getName());
+        holders.image.setBackgroundResource(user.getImagePath());
     }
-
 
     @Override
     public int getItemCount() {
-        return User.name.length;
+        return users.size();
 
     }
 
@@ -63,10 +65,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.MyViewHolder> 
             itemView.setOnClickListener(this);
         }
 
-        void onBind(int position) {
-            name.setText(User.name[position]);
-            image.setImageResource(User.imagepath[position]);
-        }
 
         @Override
         public void onClick(View v) {

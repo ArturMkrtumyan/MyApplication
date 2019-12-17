@@ -1,6 +1,5 @@
 package com.example.myapplication.Adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,19 +8,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.myapplication.Model.ChatMessage;
 import com.example.myapplication.R;
 
 import java.util.List;
 
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> {
-    private Context context;
-    private List<ChatMessage> messages;
+    private List<String> allmessages;
 
-    public ChatAdapter(Context context, List<ChatMessage> messages) {
-        this.context = context;
-        this.messages = messages;
-        notifyDataSetChanged();
+    public ChatAdapter(List<String> allmessages) {
+        this.allmessages = allmessages;
     }
 
     @NonNull
@@ -33,14 +28,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holders, int position) {
-        ChatMessage currentMessage = messages.get(position);
-        String message = currentMessage.getMessage();
+        String message = allmessages.get(position);
         holders.message.setText(message);
     }
 
     @Override
     public int getItemCount() {
-        return messages.size();
+        return allmessages.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

@@ -10,7 +10,22 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary" />
+        android:background="@color/colorPrimary">
+    <Button
+        android:id="@+id/chatButton"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:background="@drawable/ic_message_black_24dp"
+        android:visibility="gone" />
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/searchView"
+        app:iconifiedByDefault="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:searchIcon="@drawable/ic_search_black_24dp"/>
+    </androidx.appcompat.widget.Toolbar>
+
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"

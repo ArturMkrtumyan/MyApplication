@@ -15,7 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.myapplication.Adapters.ChatAdapter;
-import com.example.myapplication.Model.ChatMessage;
+import com.example.myapplication.Model.Singleton;
 import com.example.myapplication.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -24,14 +24,21 @@ import java.util.List;
 
 public class ChattingFragment extends Fragment {
     private BottomNavigationView bottomNavigationView;
-    private EditText message;
+    private EditText editText;
     private Button sendMessage;
-    private List<ChatMessage> messages;
+    private List<String> messages;
+    private List<String> allmessages;
+    private ChatAdapter adapter;
+    private Singleton singleton;
+    private boolean messagesIsNull;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         messages = new ArrayList<>();
+        singleton = Singleton.getInstance();
+        messagesIsNull = true;
     }
 
     @Override
@@ -39,26 +46,37 @@ public class ChattingFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chatting, container, false);
         final RecyclerView recyclerView = view.findViewById(R.id.chat_recyclerView);
-        ChatAdapter adapter = new ChatAdapter(getActivity(), messages);
+        final int pos = getArguments().getInt("position");
+        allmessages = singleton.getUsersList().get(pos).getAllmessage();
+        if (allmessages != null) {
+            adapter = new ChatAdapter(allmessages);
+            messagesIsNull = false;
+        } else {
+            adapter = new ChatAdapter(messages);
+        }
+        bottomNavigationView = getActivity().findViewById(R.id.nav_view);
         recyclerView.setAdapter(adapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         ((LinearLayoutManager) layoutManager).setStackFromEnd(true);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
-        message = view.findViewById(R.id.editText);
+        editText = view.findViewById(R.id.editText);
         sendMessage = view.findViewById(R.id.send);
 
 
         sendMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (messages != null) {
-                    String massage = message.getText().toString();
-                    messages.add(new ChatMessage(massage));
+                if (!messagesIsNull) {
+                    allmessages.add(editText.getText().toString());
+                    singleton.getUsersList().get(pos).setAllmessage(allmessages);
+                } else {
+                    messages.add(editText.getText().toString());
+                    singleton.getUsersList().get(pos).setAllmessage(messages);
                 }
+                adapter.notifyDataSetChanged();
             }
         });
-        bottomNavigationView = getActivity().findViewById(R.id.nav_view);
         return view;
     }
 

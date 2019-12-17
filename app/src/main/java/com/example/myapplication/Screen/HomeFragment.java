@@ -1,4 +1,5 @@
 package com.example.myapplication.Screen;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,18 +12,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.myapplication.Adapters.HomeAdapter;
+import com.example.myapplication.Model.Singleton;
 import com.example.myapplication.R;
+
+import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
     public HomeAdapter adapter;
     RecyclerView recyclerView;
+    Singleton singleton;
+    ArrayList users;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         recyclerView = view.findViewById(R.id.home_recyclerVie);
-        adapter = new HomeAdapter(getActivity());
+        singleton = Singleton.getInstance();
+        users = singleton.getUsersList();
+        adapter = new HomeAdapter(users);
         recyclerView.setAdapter(adapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -35,6 +43,8 @@ public class HomeFragment extends Fragment {
                 Bundle bundle = new Bundle();
                 bundle.putInt("a", position);
                 detailedFragment.setArguments(bundle);
+                getActivity().findViewById(R.id.chatButton).setVisibility(View.VISIBLE);
+                getActivity().findViewById(R.id.searchView).setVisibility(View.GONE);
             }
         });
         return view;
